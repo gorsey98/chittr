@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, TextInput, View, Button, Alert } from 'react-native';
+import { Text, TextInput, View, Button, Alert, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
 class UserProfile extends Component{
@@ -10,8 +10,19 @@ class UserProfile extends Component{
             family_name: "",
             email: "",
             password: "",
-            loggedIn: false
+            loggedIn: false,
+            userID: "",
+            profileData: []
         };
+    }
+
+    storeID = async (id) => {
+        try {
+            console.log("ID:", id)
+            await AsyncStorage.setItem('@id', JSON.stringify(id))
+        } catch (error) {
+            console.log (error);
+        }
     }
 
     storeLogInToken = async (token) => {
@@ -22,6 +33,17 @@ class UserProfile extends Component{
                 console.error (e)
             }
         }
+
+    retrieveID = async () => {
+        try {
+            const value = await AsyncStorage.getItem('@id')
+            if(value !== null) {
+                this.setState ({userID: value})
+            }
+        } catch (e) {
+            console.error (e)
+        }
+    }
 
     logIn(){
         let res = JSON.stringify({
@@ -46,6 +68,8 @@ class UserProfile extends Component{
         .then((responseJson)=>{
             console.log(responseJson.token);
             Alert.alert("Logged in");
+            this.getProfileData();
+            this.storeID(responseJson.id);
             this.storeLogInToken(responseJson.token);
             this.setState ({
                 loggedIn: true
@@ -82,11 +106,32 @@ class UserProfile extends Component{
         });
     }
 
+    getProfileData() {
+        return fetch ("http://10.0.2.2:3333/api/v0.0.5/user/"+this.state.userID,
+        {
+            method: 'GET'
+        })
+        .then((response) => response.json())
+        .then((responseJson) => {
+            this.setState({
+                profileData: responseJson
+            });
+        })
+        .catch ((error) => {
+            console.log (error);
+        });
+    }
+
     render(){
         if (this.state.loggedIn){
             return(
                 <View>
-                    <Text>Profile</Text>
+                    <Text>First Name</Text>
+                    <FlatList
+                    data = {this.state.profileData}
+                    renderItem = {({item})=> <Text>{item.given_name}</Text>}
+                    keyExtractor = {({id}, index) => id}
+                    />
                 </View>
             )
         }
