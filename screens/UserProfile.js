@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, TextInput, View, Button, Alert, FlatList } from 'react-native';
+import { Text, TextInput, View, Button, Alert, FlatList, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
 class UserProfile extends Component{
@@ -39,6 +39,7 @@ class UserProfile extends Component{
             const value = await AsyncStorage.getItem('@id')
             if(value !== null) {
                 this.setState ({userID: value})
+                console.log (this.state.userID)
             }
         } catch (e) {
             console.error (e)
@@ -53,7 +54,7 @@ class UserProfile extends Component{
 
         console.log(res);
 
-        return fetch("http://10.0.2.2:3333/api/v0.0.5/login", //Change back to localhost when finished
+        return fetch("http://10.0.2.2:3333/api/v0.0.5/login",
         {
             method: 'POST',
             body: res,
@@ -68,12 +69,14 @@ class UserProfile extends Component{
         .then((responseJson)=>{
             console.log(responseJson.token);
             Alert.alert("Logged in");
-            this.getProfileData();
-            this.storeID(responseJson.id);
-            this.storeLogInToken(responseJson.token);
-            this.setState ({
-                loggedIn: true
+            this.getProfileData(()=> {
+                this.storeID(responseJson.id);
+                this.storeLogInToken(responseJson.token);
+                this.setState ({
+                    loggedIn: true
             })
+            console.log (this.state.loggedIn)
+            });
         })
         .catch((error)=>{
             console.error(error)
@@ -106,7 +109,7 @@ class UserProfile extends Component{
         });
     }
 
-    getProfileData() {
+    getProfileData(done) {
         return fetch ("http://10.0.2.2:3333/api/v0.0.5/user/"+this.state.userID,
         {
             method: 'GET'
@@ -115,28 +118,33 @@ class UserProfile extends Component{
         .then((responseJson) => {
             this.setState({
                 profileData: responseJson
-            });
+            }, ()=> {done();});
         })
         .catch ((error) => {
             console.log (error);
         });
     }
 
+    componentDidMount() {
+        this.retrieveID();
+    }
+
     render(){
         if (this.state.loggedIn){
             return(
-                <View>
-                    <Text>First Name</Text>
+                <View style = {styles.viewStyle}>
+                    <Text>{this.state.profileData.given_name} {this.state.profileData.family_name}</Text>
+                    <Text>Chits</Text>
                     <FlatList
-                    data = {this.state.profileData}
-                    renderItem = {({item})=> <Text>{item.given_name}</Text>}
+                    data = {this.state.profileData.recent_chits}
+                    renderItem = {({item})=> <Text>{item.chit_content}</Text>}
                     keyExtractor = {({id}, index) => id}
                     />
                 </View>
             )
-        }
+        }else{
         return(
-            <View style = {{flexDirection: 'column'}}>
+            <View style = {styles.viewStyle}>
                 <Text>First Name</Text>
                 <TextInput
                 onChangeText = {(text) => this.setState({given_name: text})}
@@ -151,6 +159,7 @@ class UserProfile extends Component{
 
                 <Text>Email</Text>
                 <TextInput
+                style = {styles.textInput}
                 onChangeText={(text)=>this.setState({email: text})}
                 value={this.state.email}
                 textContentType='emailAddress'
@@ -164,7 +173,7 @@ class UserProfile extends Component{
 
                 <Button
                 title = "Log In"
-                onPress = {() => {this.logIn()}}
+                onPress = {() => {this.logIn()}}                
                 />
                 <Button
                 title = "Create Account"
@@ -172,7 +181,16 @@ class UserProfile extends Component{
                 />
             </View>
         )
+        }
     }
 }
+
+const styles = StyleSheet.create({
+    viewStyle: {
+        justifyContent: 'center', 
+        flex: 1,
+        backgroundColor: 'aliceblue'
+    }
+});
 
 export default UserProfile;
