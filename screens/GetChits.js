@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, ActivityIndicator, Text, View } from 'react-native';
+import { FlatList, ActivityIndicator, Text, View, StyleSheet } from 'react-native';
 
 class GetChits extends Component {
     constructor (props) {
@@ -14,14 +14,14 @@ class GetChits extends Component {
 
         if (this.state.isLoading) { //And this
             return(
-                <View>
+                <View style = {styles.viewStyle}>
                     <ActivityIndicator/>
                 </View>
             )
         }
 
         return (
-            <View>
+            <View style = {styles.viewStyle}>
                 <FlatList
                 data = {this.state.chitList}
                 renderItem = {({item})=> <Text>{item.chit_content}</Text>}
@@ -51,5 +51,13 @@ class GetChits extends Component {
         this.getData();
     }
 }
+
+const styles = StyleSheet.create({
+    viewStyle: {
+        justifyContent: 'center', 
+        flex: 1,
+        backgroundColor: 'aliceblue'
+    }
+});
 
 export default GetChits;
