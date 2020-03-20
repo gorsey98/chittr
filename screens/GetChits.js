@@ -37,6 +37,7 @@ class GetChits extends Component {
         );
     }
 
+    //Get chits method 
     getData() {
         return fetch("http://10.0.2.2:3333/api/v0.0.5/chits")
         .then ((response) => response.json())
@@ -57,6 +58,7 @@ class GetChits extends Component {
         this.getData();
     }
 
+    //Get photos method, could not get this to work 
     async getPhoto(){
         let response = fetch ("http://10.0.2.2:3333/api/v0.0.5/chits/"+chit_id+"/photo")
         if (response.status == "200")

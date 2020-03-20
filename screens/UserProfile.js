@@ -11,6 +11,8 @@ import EditProfile from './EditProfile.js'
 
   const Stack = createStackNavigator();
   
+  //Navigation code for the User Profile screens 
+
   function App() {
     return (
       <NavigationContainer>

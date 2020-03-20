@@ -19,6 +19,7 @@ class UserProfileScreen extends Component{
         };
     }
 
+    //Async store user ID to be retrieved in multiple files 
     storeID = async (id) => {
         try {
             console.log("ID:", id)
@@ -28,6 +29,7 @@ class UserProfileScreen extends Component{
         }
     }
 
+    //Async store token to be retrieved in multiple files 
     storeLogInToken = async (token) => {
             try {
                 console.log("Token:", token);
@@ -37,6 +39,7 @@ class UserProfileScreen extends Component{
             }
         }
 
+    //Retrieve ID async function, stored to variable 'userID'
     retrieveID = async () => {
         try {
             const value = await AsyncStorage.getItem('@id')
@@ -49,6 +52,7 @@ class UserProfileScreen extends Component{
         }
     }
 
+    //Retrieve token async function, stored to variable 'token'
     retrieveToken = async () => {
         try {
             const value = await AsyncStorage.getItem('@logintoken')
@@ -61,6 +65,7 @@ class UserProfileScreen extends Component{
         }
     }
 
+    //Delete LogIn token method, runs once Log Out button is pressed 
     async deleteLogInToken(){
         try{
             await AsyncStorage.removeItem('@logintoken');
@@ -71,6 +76,7 @@ class UserProfileScreen extends Component{
         }
     }
 
+    //Log In method, initialises all methods needed to display profile data as well as run the log in parameters through the api 
     logIn(){
         let res = JSON.stringify({
             email: this.state.email,
@@ -109,6 +115,7 @@ class UserProfileScreen extends Component{
         });
     }
 
+    //Create account function, posts name, email and password through API 
     createAccount() {
         let res1 = JSON.stringify({
             given_name: this.state.given_name,
@@ -135,6 +142,7 @@ class UserProfileScreen extends Component{
         });
     }
 
+    //Get profile data function
     getProfileData(done) {
         return fetch ("http://10.0.2.2:3333/api/v0.0.5/user/"+this.state.userID,
         {
@@ -154,9 +162,9 @@ class UserProfileScreen extends Component{
     componentDidMount() {
         this.retrieveID();
         this.retrieveToken();
-        console.log ("tokentokentoken" + this.state.token);
     }
 
+    //Get Profile Photo method 
     getPhoto() {
         return fetch ("http://10.0.2.2:3333/api/v0.0.5/user/"+this.state.userID+"/photo?timestamp=" + Date.now())
         .then(response => response.blob())
@@ -174,6 +182,7 @@ class UserProfileScreen extends Component{
         });
     }
 
+    //Logout Method, requires stored token as authorisation 
     logout = () =>{
         console.log(this.state.token)
         return fetch("http://10.0.2.2:3333/api/v0.0.5/logout", 
@@ -195,6 +204,7 @@ class UserProfileScreen extends Component{
         })
     }
 
+    //Navigation to Follower and Edit Profile pages 
     viewFollowers = id => {
         this.props.navigation.navigate('Followers');
     }

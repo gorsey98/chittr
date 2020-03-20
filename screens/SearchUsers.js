@@ -8,6 +8,8 @@ import OtherUserProfile from './otherUserProfile.js'
 
   const Stack = createStackNavigator();
   
+  //Search User Navigation Code 
+
   function App() {
     return (
       <NavigationContainer>

@@ -15,6 +15,7 @@ class OtherUserProfile extends Component {
         };
     }
     
+    //Retrieve user ID using AsyncStorage
     retrieveID = async (done) => {
         try {
             const value = await AsyncStorage.getItem('@profileid')
@@ -29,6 +30,7 @@ class OtherUserProfile extends Component {
         }
     }
 
+    //Retrieve Token using AsyncStorage
     retrieveToken = async () => {
         try {
             const value = await AsyncStorage.getItem('@logintoken')
@@ -41,6 +43,7 @@ class OtherUserProfile extends Component {
         }
     }
 
+    //Retrieve Profile Data method and store that data in profileData variable 
     getProfileData() {
         return fetch ("http://10.0.2.2:3333/api/v0.0.5/user/"+this.state.userID,
         {
@@ -64,6 +67,7 @@ class OtherUserProfile extends Component {
         });
     }
 
+    //Follow method, requires authorisation token to work, also uses the ID retrieved 
     followPoint(){
         let id = this.state.userID
         let token = this.state.token
@@ -111,6 +115,7 @@ class OtherUserProfile extends Component {
         }
     }
 
+    //Method to retrieve user profile photo, retrieves photo and stores it in variable photo 
     getPhoto() {
         return fetch ("http://10.0.2.2:3333/api/v0.0.5/user/"+this.state.userID+"/photo?timestamp=" + Date.now())
         .then(response => response.blob())

@@ -12,6 +12,8 @@ class SearchUserScreen extends Component{
         };
     }
 
+
+    //Retrieves ProfileID using AsyncStorage
     storeProfileID = async (id) => {
         try {
             console.log("ID:", id)
@@ -21,6 +23,7 @@ class SearchUserScreen extends Component{
         }
     }
 
+    //Search Function which stays blank if there is no text, or displays and adds results to dataList if there is
     search = text => {
         this.setState ({search: text});
         if (text == ''){
@@ -41,6 +44,7 @@ class SearchUserScreen extends Component{
         }
     }
 
+    //Navigate to single profile function
     viewProfile = id => {
         this.storeProfileID(id);
         this.props.navigation.navigate('OtherUserProfile');

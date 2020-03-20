@@ -17,6 +17,7 @@ class UploadPhoto extends Component {
         this.retrieveToken();
     }
 
+    //Async token retrieval function
     retrieveToken = async () => {
         try {
             const value = await AsyncStorage.getItem('@logintoken')
@@ -28,6 +29,7 @@ class UploadPhoto extends Component {
         }
     }
 
+    //Function which takes a photo then updates the users profile photo, takes auth token 
     newProfilePhoto = async()=> {
         if (this.camera){
             const options = {quality: 0.5, base64: true};

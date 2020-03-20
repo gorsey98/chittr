@@ -13,6 +13,7 @@ class Followers extends Component {
         };
     }
 
+    //Get followers function with embedded async retrieval for user ID number 
     async getFollowers(done){
         let id = JSON.parse(await AsyncStorage.getItem('id'));
         console.log ("check" + id)

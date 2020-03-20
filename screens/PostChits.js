@@ -19,6 +19,7 @@ class PostChits extends Component{
         };
     }
 
+    //Location Permission Pop Up Function 
     requestLocationPermission = async () => {
         try {
             const granted = await PermissionsAndroid.request(
@@ -44,6 +45,7 @@ class PostChits extends Component{
         }
     }
 
+    //Find Coordinates Function, once found stores longitude and latitude in variables 
     findCoordinates = (done) => {
         if(!this.state.locationPermission) {
             this.state.locationPermission = this.requestLocationPermission()
@@ -79,6 +81,7 @@ class PostChits extends Component{
         });
     }
 
+    //Async retrieval for token 
     retrieveToken = async (done) => {
         try {
             const value = await AsyncStorage.getItem('@logintoken')
@@ -92,6 +95,7 @@ class PostChits extends Component{
         }
     }
 
+    //Async retrieval for ID 
     retrieveID = async () => {
         try {
             const value = await AsyncStorage.getItem('@id')
@@ -104,6 +108,7 @@ class PostChits extends Component{
         }
     }
 
+    //Post chit function, first half of IF statement contains geolocation second half does not 
     postChit(){
         let res = JSON.stringify({
             timestamp: Date.parse(new Date()),
@@ -156,6 +161,7 @@ class PostChits extends Component{
         }
     }
 
+    //Post photo function 
     postPhoto(){
         return fetch ("http://10.0.2.2:3333/api/v0.0.5/chits/", 
         {

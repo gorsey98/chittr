@@ -13,6 +13,7 @@ class Following extends Component {
         };
     }
 
+    //Get following function with embedded async retrieval for user ID number
     async getFollowing(done){
         let id = JSON.parse(await AsyncStorage.getItem('id'));
         console.log ("check" + id)

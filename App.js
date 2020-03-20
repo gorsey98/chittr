@@ -8,6 +8,8 @@ import SearchUsers from './screens/SearchUsers.js'
 import UserProfile from './screens/UserProfile.js'
 import Camera from './screens/Camera.js'
 
+//Tab Navigation Code
+
 const AppTabNav = createBottomTabNavigator({
   Home: {
     screen: GetChits

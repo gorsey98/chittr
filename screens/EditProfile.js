@@ -16,6 +16,7 @@ class EditProfile extends Component {
         };
     }
 
+    //Retrieve token async function
     retrieveToken = async () => {
         try {
             const value = await AsyncStorage.getItem('@logintoken')
@@ -28,6 +29,7 @@ class EditProfile extends Component {
         }
     }
 
+    //Retrieve ID async function 
     retrieveID = async () => {
         try {
             const value = await AsyncStorage.getItem('@id')
@@ -45,6 +47,7 @@ class EditProfile extends Component {
         this.retrieveID();
     }
 
+    //Edit account PATCH function 
     editAccount() {
         let res1 = JSON.stringify({
             given_name: this.state.given_name,
