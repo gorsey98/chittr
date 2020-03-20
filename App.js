@@ -1,33 +1,33 @@
-import { createAppContainer } from 'react-navigation';
-import { createBottomTabNavigator } from 'react-navigation-tabs';
+import {createAppContainer} from 'react-navigation';
+import {createBottomTabNavigator} from 'react-navigation-tabs';
 
 //Tab Navigator
-import GetChits from './screens/GetChits.js'
-import PostChits from './screens/PostChits.js'
-import SearchUsers from './screens/SearchUsers.js'
-import UserProfile from './screens/UserProfile.js'
-import Camera from './screens/Camera.js'
+import GetChits from './screens/GetChits.js';
+import PostChits from './screens/PostChits.js';
+import SearchUsers from './screens/SearchUsers.js';
+import UserProfile from './screens/UserProfile.js';
+import Camera from './screens/Camera.js';
 
 //Tab Navigation Code
 
 const AppTabNav = createBottomTabNavigator({
   Home: {
-    screen: GetChits
+    screen: GetChits,
   },
   Post: {
-    screen: PostChits
+    screen: PostChits,
   },
   Search: {
-    screen: SearchUsers
+    screen: SearchUsers,
   },
   Camera: {
-    screen: Camera
+    screen: Camera,
   },
   Profile: {
-    screen: UserProfile
-  }
+    screen: UserProfile,
+  },
 });
 
-const AppContainer = createAppContainer(AppTabNav)
+const AppContainer = createAppContainer(AppTabNav);
 
 export default AppContainer;

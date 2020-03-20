@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Fri Mar 20 13:57:58 GMT 2020
+#Fri Mar 20 16:43:44 GMT 2020
 64.base=/Users/samgorse/Documents/MADAssignment/chittr1/android/app/build/intermediates/transforms/mergeJniLibs/debug/0
 64.baseType=DIRECTORY
 33.base=/Users/samgorse/Documents/MADAssignment/chittr1/android/app/build/intermediates/transforms/mergeJniLibs/debug/0
