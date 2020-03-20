@@ -49,6 +49,18 @@ class UserProfileScreen extends Component{
         }
     }
 
+    retrieveToken = async () => {
+        try {
+            const value = await AsyncStorage.getItem('@logintoken')
+            if(value !== null) {
+                this.setState ({token: value})
+                console.log (this.state.token)
+            }
+        } catch (e) {
+            console.error (e)
+        }
+    }
+
     async deleteLogInToken(){
         try{
             await AsyncStorage.removeItem('@logintoken');
@@ -141,10 +153,12 @@ class UserProfileScreen extends Component{
 
     componentDidMount() {
         this.retrieveID();
+        this.retrieveToken();
+        console.log ("tokentokentoken" + this.state.token);
     }
 
     getPhoto() {
-        return fetch ("http://10.0.2.2:3333/api/v0.0.5/user/"+this.state.userID+"/photo")
+        return fetch ("http://10.0.2.2:3333/api/v0.0.5/user/"+this.state.userID+"/photo?timestamp=" + Date.now())
         .then(response => response.blob())
         .then((image) => {
             var reader = new FileReader();
@@ -161,10 +175,10 @@ class UserProfileScreen extends Component{
     }
 
     logout = () =>{
+        console.log(this.state.token)
         return fetch("http://10.0.2.2:3333/api/v0.0.5/logout", 
         {
             method: 'POST',
-            withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
                 'X-Authorization': this.state.token
@@ -175,9 +189,9 @@ class UserProfileScreen extends Component{
             this.setState({
                 loggedIn: false
             })
-            .catch(function(error){
-                console.log(error);
-            })
+        })
+        .catch(function(error){
+            console.log(error);
         })
     }
 
@@ -201,18 +215,19 @@ class UserProfileScreen extends Component{
         if (this.state.loggedIn){
             return(
                 <View style = {styles.viewStyle}>
+                    <View style = {styles.viewAvatar}>
                     <Avatar
                     rounded
                     source={{uri: this.state.photo}}
                     onPress = {()=>this.viewUploadPhoto()}
                     />
+                    </View>
+
+                    <View style = {styles.viewNameText}>
                     <Text>{this.state.profileData.given_name} {this.state.profileData.family_name}</Text>
-                    <Text>Chits</Text>
-                    <FlatList
-                    data = {this.state.profileData.recent_chits}
-                    renderItem = {({item})=> <Text>{item.chit_content}</Text>}
-                    keyExtractor = {({id}, index) => id}
-                    />
+                    </View>
+
+                    <View style = {styles.viewFollowButtons}>
                     <Button
                     title = "Followers"
                     onPress = {()=> {this.viewFollowers()}}
@@ -221,6 +236,21 @@ class UserProfileScreen extends Component{
                     title = "Following"
                     onPress = {()=> {this.viewFollowing()}}
                     />
+                    </View>
+                    
+                    <View style = {styles.viewChitTitle}>
+                    <Text>Chits</Text>
+                    </View>
+
+                    <View style = {styles.viewChitBodyText}>
+                    <FlatList
+                    data = {this.state.profileData.recent_chits}
+                    renderItem = {({item})=> <Text>{item.chit_content}</Text>}
+                    keyExtractor = {({id}, index) => id}
+                    />
+                    </View>
+
+                    <View style = {styles.viewProfileButtons}>
                     <Button
                     title = "Log Out"
                     onPress = {()=> {this.logout()}}
@@ -229,36 +259,41 @@ class UserProfileScreen extends Component{
                     title = "Edit Profile"
                     onPress = {()=> {this.viewEditProile()}}
                     />
+                    </View>
                 </View>
             )
         }else{
         return(
             <View style = {styles.viewStyle}>
-                <Text>First Name</Text>
+                <View style = {styles.viewTextInput}>
                 <TextInput
                 onChangeText = {(text) => this.setState({given_name: text})}
                 value = {this.state.given_name}
+                placeholder = "First Name"
                 />
 
-                <Text>Second Name</Text>
                 <TextInput
                 onChangeText = {(text) => this.setState({family_name: text})}
                 value = {this.state.family_name}
+                placeholder = "Second Name"
                 />
 
-                <Text>Email</Text>
                 <TextInput
                 onChangeText={(text)=>this.setState({email: text})}
                 value={this.state.email}
                 textContentType='emailAddress'
+                placeholder = "Email"
                 />
-                <Text>Password</Text>
+
                 <TextInput
                 onChangeText = {(text) => this.setState({password: text})}
                 value = {this.state.password}
                 secureTextEntry
+                placeholder = "Password"
                 />
+                </View>
 
+                <View style = {styles.viewButtons}>
                 <Button
                 title = "Log In"
                 onPress = {() => {this.logIn()}}                
@@ -267,6 +302,7 @@ class UserProfileScreen extends Component{
                 title = "Create Account"
                 onPress = {() => {this.createAccount()}}
                 />
+                </View>
             </View>
         )
         }
@@ -278,6 +314,54 @@ const styles = StyleSheet.create({
         justifyContent: 'center', 
         flex: 1,
         backgroundColor: 'aliceblue'
+    },
+    viewButtons: {
+        backgroundColor: 'black',
+        margin: 10,
+        padding: 2
+    },
+    viewTextInput: {
+        paddingLeft: 20,
+        paddingRight: 20,
+        backgroundColor: 'white',
+        margin: 10,
+        padding: 2
+    },
+    viewAvatar: {
+        alignSelf: 'center',
+        paddingTop: 30
+    },
+    viewNameText: {
+        fontSize: 22, 
+        fontWeight: 'bold',
+        alignSelf: 'center',
+        paddingTop: 10,
+        paddingBottom: 10
+    },
+    viewFollowButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignSelf: 'center',
+        paddingLeft: 10,
+        paddingRight: 10
+    },
+    viewChitTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        alignSelf: 'center',
+        paddingTop: 15,
+        paddingBottom: 15
+    },
+    viewChitBodyText: {
+        fontSize: 14,
+        paddingTop: 10,
+        paddingBottom: 10,
+        backgroundColor: '#DCDCDC'
+    },
+    viewProfileButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingTop: 300
     }
 });
 

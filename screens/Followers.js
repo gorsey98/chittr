@@ -1,23 +1,29 @@
 import React, { Component } from 'react';
-import { Text, TextInput, View, Button, Alert, FlatList, StyleSheet } from 'react-native';
+import { Text, TextInput, View, Button, Alert, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { ListItem } from 'react-native-elements';
 
-class Followers extends Component {
+
+class Followers extends Component { 
     constructor(props){
         super(props);
         this.state={
-            followingList: []
+            followingList: [],
+            isLoading: true
         };
     }
 
-    async getFollowers(){
+    async getFollowers(done){
         let id = JSON.parse(await AsyncStorage.getItem('id'));
+        console.log ("check" + id)
         try {
             const response = await fetch("http://10.0.2.2:3333/api/v0.0.5/user/" + id + "/followers");
             const responseJson = await response.json();
             this.setState({
-                followingList: responseJson
+                followingList: responseJson,
+                isLoading: false
+            },()=>{
+                done();
             });
         }
         catch (error) {
@@ -26,22 +32,34 @@ class Followers extends Component {
     }
 
     componentDidMount(){
-        this.getFollowers();
+        this.getFollowers(()=>{
+            console.log (this.state.followingList);
+        });
     }
 
     render() {
+        console.log (this.state.isLoading)
+        if (this.state.isLoading) {
+            return(
+            <View>
+            <ActivityIndicator />
+            </View>
+            );
+        } else {
         return(
             <View>
                 <FlatList
                 data = {this.state.followingList}
-                remderItem={({item})=> (
+                renderItem={({item})=> (
                     <ListItem
                     title={item.given_name}
                     />
                 )}
+                keyExtractor = {({id}, index) => id}
             />
             </View>
         );
+        }
     }
 }
 

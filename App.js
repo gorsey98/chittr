@@ -1,6 +1,7 @@
 import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 
+//Tab Navigator
 import GetChits from './screens/GetChits.js'
 import PostChits from './screens/PostChits.js'
 import SearchUsers from './screens/SearchUsers.js'

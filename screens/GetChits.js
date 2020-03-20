@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 import { FlatList, ActivityIndicator, Text, View, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 class GetChits extends Component {
     constructor (props) {
         super (props);
         this.state = {
-            isLoading: true, //Use this for User Profile switching from login to profile
+            isLoading: true, 
             chitList: []
         }
     }
 
     render() {
 
-        if (this.state.isLoading) { //And this
+        if (this.state.isLoading) { 
             return(
                 <View style = {styles.viewStyle}>
                     <ActivityIndicator/>
@@ -24,7 +25,12 @@ class GetChits extends Component {
             <View style = {styles.viewStyle}>
                 <FlatList
                 data = {this.state.chitList}
-                renderItem = {({item})=> <Text>{item.chit_content}</Text>}
+                renderItem = {({item})=> (
+                <View style = {styles.viewFlatList}>
+                    <Text style = {styles.viewNameText}>{item.user.given_name}</Text>
+                    <Text style = {styles.viewChitText}>{item.chit_content}</Text>
+                    </View>
+                )}
                 keyExtractor = {({id}, index) => id}
                 />
             </View>
@@ -32,7 +38,7 @@ class GetChits extends Component {
     }
 
     getData() {
-        return fetch('http://10.0.2.2:3333/api/v0.0.5/chits') //Needs sorting, will not work with 127.0.0.1 address
+        return fetch("http://10.0.2.2:3333/api/v0.0.5/chits")
         .then ((response) => response.json())
         .then ((responseJson) => {
 
@@ -50,6 +56,16 @@ class GetChits extends Component {
     componentDidMount() {
         this.getData();
     }
+
+    async getPhoto(){
+        let response = fetch ("http://10.0.2.2:3333/api/v0.0.5/chits/"+chit_id+"/photo")
+        if (response.status == "200")
+        {
+            return response.blob();
+        } else {
+            return null;
+        }
+    }
 }
 
 const styles = StyleSheet.create({
@@ -57,6 +73,22 @@ const styles = StyleSheet.create({
         justifyContent: 'center', 
         flex: 1,
         backgroundColor: 'aliceblue'
+    },
+    viewFlatList: {
+        flexDirection: "column",
+        justifyContent: "center",
+        width: "100%"
+    },
+    viewNameText: {
+        fontSize: 18,
+        padding: 20,
+        fontWeight: "bold",
+        backgroundColor: "#DCDCDC"
+    },
+    viewChitText: {
+        fontSize: 14,
+        padding: 10,
+        backgroundColor: "#F0F8FF"
     }
 });
 

@@ -74,39 +74,64 @@ class EditProfile extends Component {
 
     render(){
         return(
-            <View>
-                <Text>First Name</Text>
+            <View style = {styles.viewStyle}>
+                <View style = {styles.viewTextInput}>
                 <TextInput
                 onChangeText = {(text)=>this.setState({given_name: text})}
                 value = {this.state.given_name}
+                placeholder = "First Name"
                 />
 
-                <Text>Second Name</Text>
                 <TextInput
                 onChangeText = {(text) => this.setState({family_name: text})}
                 value = {this.state.family_name}
+                placeholder = "Second Name"
                 />
 
-                <Text>Email</Text>
                 <TextInput
                 onChangeText={(text)=>this.setState({email: text})}
                 value={this.state.email}
                 textContentType='emailAddress'
+                placeholder = "Email"
                 />
 
-                <Text>Password</Text>
                 <TextInput
                 onChangeText = {(text) => this.setState({password: text})}
                 value = {this.state.password}
                 secureTextEntry
+                placeholder = "Password"
                 />
+                </View>
 
+                <View style = {styles.viewButtons}>
                 <Button
                 title = "Save Changes"
                 onPress = {()=> {this.editAccount()}}
                 />
+                </View>
             </View>
         )
     }
 }
+
+const styles = StyleSheet.create({
+    viewStyle: {
+        justifyContent: 'center', 
+        flex: 1,
+        backgroundColor: 'aliceblue'
+    },
+    viewButtons: {
+        backgroundColor: 'black',
+        margin: 10,
+        padding: 2
+    },
+    viewTextInput: {
+        paddingLeft: 20,
+        paddingRight: 20,
+        backgroundColor: 'white',
+        margin: 10,
+        padding: 2
+    }
+});
+
 export default EditProfile;

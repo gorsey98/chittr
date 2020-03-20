@@ -54,19 +54,19 @@ class UploadPhoto extends Component {
 
     render() {
         return(
-            <View style = {StyleSheet.container}>
+            <View style={styles.container}>
                 <RNCamera
                 ref={ref=>{
                     this.camera = ref;
                 }}
-                style = {styles.preview}
+                style={styles.preview}
                 />
-                <View style = {{flex:0, flexDirection:'row', justifyContent:'center'}}>
+                <View style={{flex:0, flexDirection:'row', justifyContent:'center'}}>
                     <TouchableOpacity
-                    onPress={this.takePicture.bind(this)}
+                    onPress={this.newProfilePhoto.bind(this)}
                     style={styles.capture}
                     >
-                    <Text style = {{fontSize:16}}>
+                    <Text style={{fontSize: 16}}>
                         CAPTURE
                     </Text>
                     </TouchableOpacity>
